@@ -1,0 +1,8 @@
+Weekday,Day_Type,Mean_Active_Power_kW,Median_Active_Power_kW,Reading_Count
+Friday,Weekday,1.0420864629599416,0.628,296463
+Monday,Weekday,1.0017493064763143,0.512,296640
+Saturday,Weekend,1.233650523097987,0.784,295596
+Sunday,Weekend,1.2130790029788279,0.68,296640
+Thursday,Weekday,0.9820718816776943,0.498,296640
+Tuesday,Weekday,1.0747696914642757,0.62,296640
+Wednesday,Weekday,1.0850257110714234,0.63,296640

@@ -1,0 +1,10 @@
+Metric,Value
+Rows after preprocessing,2075259.0
+Columns,23.0
+Missing cells after treatment,0.0
+Duplicate timestamps,0.0
+Mean active power (kW),1.0902795361928317
+Median active power (kW),0.614
+Weekday mean active power (kW),1.0371400204384478
+Weekend mean active power (kW),1.2233466311897827
+Welch test p-value,0.0
