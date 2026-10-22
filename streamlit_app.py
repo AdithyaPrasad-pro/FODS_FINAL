@@ -1,6 +1,6 @@
 """WattWise | Household Energy Recommendation System
-Foundations of Data Science (FODS) Review 2 Case Study
-Simple & Interactive Streamlit Deployment of the WattWise Recommendation Model.
+Foundations of Data Science Case Study
+Production Deployment of the WattWise Recommendation Model.
 """
 
 from pathlib import Path
@@ -64,11 +64,11 @@ def get_recommendation(power_kw):
             "css": "rec-low",
             "badge_color": "#22c55e",
             "icon": "🟢",
-            "summary": "Excellent Energy Efficiency!",
-            "recommendation": "Maintain your current electricity usage habits. Your consumption is well within the most efficient 33% of household records.",
+            "summary": "High Energy Efficiency Profile",
+            "recommendation": "Maintain current electricity usage habits. Household consumption falls within the most energy-efficient 33% of recorded observations.",
             "tips": [
-                "Continue running heavy appliances during off-peak hours.",
-                "Keep base load devices unplugged when not in active use."
+                "Continue running flexible appliances during off-peak windows.",
+                "Maintain low standby loads across inactive devices."
             ]
         }
     elif power_kw <= HIGH_THRESHOLD:
@@ -77,11 +77,11 @@ def get_recommendation(power_kw):
             "css": "rec-normal",
             "badge_color": "#3b82f6",
             "icon": "🟡",
-            "summary": "Standard Household Usage",
-            "recommendation": "Your consumption aligns with typical household patterns. Keep monitoring daily usage to prevent shifting into the high tier.",
+            "summary": "Standard Household Profile",
+            "recommendation": "Consumption aligns with median household patterns. Monitor daily usage to prevent shifting into higher peak demand brackets.",
             "tips": [
                 "Switch off standby electronics and entertainment setups overnight.",
-                "Look for flexible appliance tasks that can be shifted away from the 8:00 PM peak."
+                "Shift non-essential high-power tasks away from the 8:00 PM peak window."
             ]
         }
     else:
@@ -90,12 +90,12 @@ def get_recommendation(power_kw):
             "css": "rec-high",
             "badge_color": "#ef4444",
             "icon": "🔴",
-            "summary": "High Energy Usage Alert!",
-            "recommendation": "Review household activities on high-consumption days and actively look for avoidable electricity usage, especially in heating, cooling, and evening appliances.",
+            "summary": "High Consumption Profile",
+            "recommendation": "Review household energy use during peak intervals. Targeted adjustments in high-energy appliance scheduling can yield immediate reductions.",
             "tips": [
-                "Heavy load detected: Avoid running washing machine, dishwasher, or water heaters during the 7:00 PM - 9:00 PM peak.",
-                "Sub-meter 3 (AC/Heater) consumes over 70% of appliance energy—adjust thermostat by 1-2 degrees to save significant energy.",
-                "Check for high weekend usage (empirical data shows a +18% weekend surge)."
+                "High load detected: Avoid running washing machine, dishwasher, or water heaters during the 7:00 PM - 9:00 PM evening peak.",
+                "Sub-meter 3 (AC/Heater) represents over 70% of appliance energy—adjust thermostat by 1-2 degrees to achieve measurable reductions.",
+                "Mitigate weekend energy surge (empirical data shows an average +17.95% load increase on weekends)."
             ]
         }
 
@@ -103,34 +103,34 @@ def get_recommendation(power_kw):
 # ==============================================================================
 # HEADER
 # ==============================================================================
-st.markdown("<span class='badge'>FODS REVIEW 2 CASE STUDY</span>", unsafe_allow_html=True)
-st.title("⚡ WattWise: Energy Recommendation System")
+st.markdown("<span class='badge'>ENERGY ANALYTICS PLATFORM</span>", unsafe_allow_html=True)
+st.title("⚡ WattWise: Household Energy Recommendation System")
 st.markdown(
-    "A clean, data-driven recommendation engine based on statistical analysis of **2,075,259 household power readings** (UCI Repository). "
-    "Daily usage is classified using data percentiles to provide actionable energy-saving guidance."
+    "An empirical, data-driven recommendation system built on **2,075,259 household power measurements** (UCI Machine Learning Repository). "
+    "Household consumption is evaluated against non-parametric quantile thresholds to deliver targeted, actionable efficiency recommendations."
 )
 st.divider()
 
 
 # ==============================================================================
-# SECTION 1: INTERACTIVE RECOMMENDATION ENGINE
+# SECTION 1: CONSUMPTION EVALUATION
 # ==============================================================================
-st.markdown("## 🎯 Step 1: Check Your Household Consumption")
-st.caption("Input an active power value or pick a historical date from the dataset to generate instant recommendations:")
+st.markdown("## ⚡ Household Energy Assessment")
+st.caption("Evaluate active power readings to determine efficiency tier and actionable recommendations:")
 
 col_input, col_result = st.columns([1.1, 1.4], gap="large")
 
 with col_input:
     mode = st.radio(
-        "Choose Input Method:",
-        ["Manually Test Power Value (kW)", "Select a Date from Historical Dataset"],
+        "Assessment Mode:",
+        ["Simulate Active Power (kW)", "Select from Historical Dataset"],
         horizontal=True
     )
     
     selected_power = 1.250
     selected_date_str = ""
     
-    if mode == "Manually Test Power Value (kW)":
+    if mode == "Simulate Active Power (kW)":
         selected_power = st.slider(
             "Average Active Power (kW):",
             min_value=0.20,
@@ -139,14 +139,14 @@ with col_input:
             step=0.01,
             help="Average active power consumed in kilowatts"
         )
-        st.write(f"👉 Current Reading: **{selected_power:.3f} kW**")
-        st.caption(f"Thresholds: Low <= **{LOW_THRESHOLD:.2f} kW** | Normal: **{LOW_THRESHOLD:.2f} - {HIGH_THRESHOLD:.2f} kW** | High > **{HIGH_THRESHOLD:.2f} kW**")
+        st.write(f"Evaluated Active Power: **{selected_power:.3f} kW**")
+        st.caption(f"Tiers: Low <= **{LOW_THRESHOLD:.2f} kW** | Normal: **{LOW_THRESHOLD:.2f} - {HIGH_THRESHOLD:.2f} kW** | High > **{HIGH_THRESHOLD:.2f} kW**")
     
     else:
         if daily_df is not None and "Date" in daily_df.columns:
             date_col = "Date"
             date_options = daily_df[date_col].dropna().tolist()
-            chosen_date = st.selectbox("Select a Date:", date_options[-30:], index=len(date_options[-30:]) - 5)
+            chosen_date = st.selectbox("Select Historical Date:", date_options[-30:], index=len(date_options[-30:]) - 5)
             row = daily_df[daily_df[date_col] == chosen_date].iloc[0]
             selected_power = float(row["Mean_Active_Power_kW"])
             selected_date_str = f"Date: {chosen_date}"
@@ -158,7 +158,7 @@ with col_input:
 rec_data = get_recommendation(selected_power)
 
 with col_result:
-    st.markdown("### 📋 WattWise Recommendation")
+    st.markdown("### 📋 WattWise Advisory Plan")
     
     st.markdown(f"""
     <div class='recommendation-card {rec_data["css"]}'>
@@ -183,10 +183,10 @@ st.divider()
 
 
 # ==============================================================================
-# SECTION 2: WHY THESE RULES? (THE FODS DATA SCIENCE EVIDENCE)
+# SECTION 2: EMPIRICAL EVIDENCE & METHODOLOGY
 # ==============================================================================
-st.markdown("## 🔍 Step 2: The Data Science Evidence Behind the Rules")
-st.caption("How exploratory data analysis and hypothesis testing justified these recommendation thresholds:")
+st.markdown("## 📊 Empirical Evidence & Quantile Methodology")
+st.caption("Statistical distribution and quantile-based threshold justification from the UCI historical dataset:")
 
 s1, s2, s3, s4 = st.columns(4)
 with s1:
@@ -226,7 +226,7 @@ c_left, c_right = st.columns(2, gap="medium")
 with c_left:
     st.markdown("### 📊 Balanced Consumption Classes")
     class_df = pd.DataFrame({
-        "Class": ["Low_Consumption (<= 0.90 kW)", "Normal_Consumption (0.90 - 1.22 kW)", "High_Consumption (> 1.22 kW)"],
+        "Class": ["Low Consumption (<= 0.90 kW)", "Normal Consumption (0.90 - 1.22 kW)", "High Consumption (> 1.22 kW)"],
         "Observed Days": [481, 480, 481],
         "Mean Power (kW)": [0.660, 1.071, 1.543]
     })
@@ -243,7 +243,7 @@ with c_left:
     fig_class.update_xaxes(showgrid=False)
     fig_class.update_yaxes(gridcolor="rgba(160,185,210,0.1)")
     st.plotly_chart(fig_class, use_container_width=True)
-    st.caption("Each tier contains ~481 days, ensuring unbiased, transparent categorization.")
+    st.caption("Each tier contains approximately 481 days, establishing balanced, non-parametric classification.")
 
 with c_right:
     st.markdown("### ⏰ Daily 24-Hour Diurnal Pattern")
@@ -261,7 +261,7 @@ with c_right:
         fig_h.update_xaxes(showgrid=False)
         fig_h.update_yaxes(gridcolor="rgba(160,185,210,0.1)")
         st.plotly_chart(fig_h, use_container_width=True)
-        st.caption("Peak demand at 20:00 (1.890 kW) is 4.19× the overnight minimum at 04:00 (0.451 kW).")
+        st.caption("Peak demand at 20:00 (1.890 kW) is 4.19× the overnight base load at 04:00 (0.451 kW).")
     else:
         st.info("Hourly summary table loading...")
 
@@ -269,15 +269,13 @@ st.write("")
 st.divider()
 
 # ==============================================================================
-# FOOTER / PRESENTATION RECAP
+# SECTION 3: SYSTEM METHODOLOGY & SUMMARY
 # ==============================================================================
-st.markdown("### 🎓 How to Explain this Project in Review 2 (1-Minute Pitch)")
+st.markdown("### 📌 System Methodology & Scientific Principles")
 st.markdown("""
-1. **The Dataset:** We analyzed 2,075,259 minute-level electricity readings from the UCI Machine Learning repository over a 47-month period.
-2. **The Problem:** Households need actionable, transparent feedback on when and how they consume energy without relying on black-box predictions.
-3. **The Data Science Solution:** Using exploratory data analysis and empirical quantiles, we created the **WattWise Recommendation Engine**:
-   - Classifies days into **Low** ($\le 0.90\text{ kW}$), **Normal** ($0.90 - 1.22\text{ kW}$), and **High** ($> 1.22\text{ kW}$) tiers.
-   - Triggers targeted advice based on our statistical discovery that evening hours (8 PM) and weekends (+18% surge, Welch's $t=106.33, p<0.001$) drive the bulk of avoidable demand.
+- **Dataset Provenance:** 2,075,259 minute-level electricity observations from the UCI Machine Learning Repository (December 2006 – November 2010).
+- **Quantile Classification:** Equal 33.3% tertile partitioning establishes non-parametric baseline boundaries at **0.903 kW** and **1.223 kW**.
+- **Evidence-Based Guidance:** Recommendations directly target the empirically proven evening peak at **20:00 (1.890 kW)** and the **+17.95% weekend surge** validated via Welch's two-sample t-test ($t = 106.33, p < 0.0001$).
 """)
 
-st.caption("WattWise | Foundations of Data Science Review 2 | Built with Streamlit & Plotly")
+st.caption("WattWise Energy Intelligence Platform • Built with Streamlit & Plotly")
