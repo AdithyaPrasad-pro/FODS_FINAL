@@ -1,0 +1,4 @@
+Consumption_Class,Days,Percentage,Mean_Daily_Active_Power_kW,Threshold_Range,WattWise_Recommendation
+Low_Consumption,481,33.36%,0.6601,<= 0.903 kW,Maintain current usage habits and continue monitoring consumption.
+Normal_Consumption,480,33.29%,1.0708,0.903 - 1.223 kW,Monitor usage and switch off appliances when they are not needed.
+High_Consumption,481,33.36%,1.5429,> 1.223 kW,Review usage during high-consumption days and look for avoidable electricity use.
